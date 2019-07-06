@@ -1,31 +1,43 @@
 import 'package:flutter/material.dart'; 
 import 'package:earthquakebroadcast/Home/Data/EarthquakeItemData.dart';
+ import 'package:earthquakebroadcast/Home/Data/EarthquakeData.dart';
 
-class EarthquakeDetailPage extends StatelessWidget {
-  final EarthquakeItemData detailItem;
-  EarthquakeDetailPage({this.detailItem});
+class EarthquakeDetailView extends StatelessWidget { 
+  final double itemId;
+  EarthquakeDetailView({
+    Key key, 
+    @required this.itemId
+  })
+     : super(key: key);
 
-  @override
-  Widget build(BuildContext context) { 
-   return MaterialApp(
-     title:'详细信息',
-     home: EarthquakeDetailView(
-       detailItem: detailItem,
-     ),
-   );
-  }
-}
-
-class EarthquakeDetailView extends StatelessWidget {
-  final EarthquakeItemData detailItem;
-  EarthquakeDetailView({this.detailItem});
   @override
   Widget build(BuildContext context) { 
      return Scaffold(
        appBar: new AppBar(
          title: new Text('地震详细信息'),
        ) ,
-       body: new Column (
+       body: _showWidget(context),
+     );
+  }
+
+  Widget _showWidget(BuildContext context){
+    return FutureBuilder(
+      future: getDetailData(itemId),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) { 
+          EarthquakeItemData item =  snapshot.data;
+          return _getInfoWidegt(item);
+        } else if (snapshot.hasError){
+          return new Text('${snapshot.hasError}');
+        } else {
+          return new CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _getInfoWidegt (EarthquakeItemData detailItem) {
+    return new Column (
         children: <Widget>[
           new DetailInfoItem(
           name: '位置',
@@ -52,8 +64,7 @@ class EarthquakeDetailView extends StatelessWidget {
           value: detailItem.epiDepth.toString(),
         ),
         ],
-       ),
-     );
+       );
   }
 }
 

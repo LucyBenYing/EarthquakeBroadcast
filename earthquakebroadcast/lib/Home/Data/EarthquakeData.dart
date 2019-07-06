@@ -1,8 +1,5 @@
-// import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-// import 'dart:convert';  
+import 'package:dio/dio.dart'; 
 import 'EarthquakeRspData.dart';
 import 'EarthquakeItemData.dart';
 
@@ -98,9 +95,7 @@ Future <EarthquakeRspData> getHttp() async {
   }
 }
 
-EarthquakeRspData getRspDatas(Map<String, dynamic> datas) {
-return new EarthquakeRspData.formJson(datas);
-}
+
 
 List<EarthquakeItemData> getDats( List<Map<String,dynamic>> datas){
     // 模型序列化  
@@ -109,3 +104,48 @@ List<EarthquakeItemData> getDats( List<Map<String,dynamic>> datas){
     }).toList();  
   }
 }
+
+// 首页数据
+Future<List<EarthquakeItemData>> getHomePageDatas() async{
+try {
+    final String  url = 'http://www.nicecw.com/api/getlist';
+    Response response = await Dio().get(url); 
+    print(response);
+    if (response.data != null) {
+      // return  getDats(response.data);
+      return getRspDatas(response.data).data;
+    } else {
+      return null;
+    }
+
+  }catch (e) {
+    print(e);
+    return null;
+  }
+}
+
+EarthquakeRspData getRspDatas(Map<String, dynamic> datas) {
+return new EarthquakeRspData.formJson(datas);
+}
+
+// 详情页数据
+Future<EarthquakeItemData> getDetailData(double itemId) async{ 
+    try {
+       final url = 'http://www.nicecw.com/api/getid';
+    final    Map<String, dynamic> params = {'id': itemId};
+    final dio = new Dio();
+    Response res = await dio.get(
+      url,
+      queryParameters: params,
+    );
+    print(res);
+    if (res.data != null) {
+      // return ea
+    }
+    return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+   
+  }

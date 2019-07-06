@@ -7,7 +7,7 @@ import 'package:earthquakebroadcast/Home/Push/JPushConfig.dart';
 void main() {
  setupPush();
  runApp(
-   EarthquakeApp()  
+   EarthquakeHomeApp()  
  );
 } 
 // void MyApp(){}

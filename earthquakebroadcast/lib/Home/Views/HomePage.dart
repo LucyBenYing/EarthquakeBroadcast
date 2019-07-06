@@ -1,60 +1,47 @@
 import 'package:flutter/material.dart'; 
-import 'package:earthquakebroadcast/Home/Data/EarthquakeItemData.dart';
+import 'package:earthquakebroadcast/Home/Data/EarthquakeItemData.dart';  
 import 'package:earthquakebroadcast/Home/Data/EarthquakeData.dart';
-import 'EarthquakeDetailPage.dart';
+import 'EarthquakeDetailPage.dart'; 
 
-class EarthquakeApp  extends StatefulWidget {
+class EarthquakeHomeApp extends StatelessWidget {
   @override
-  _EarthquakeAppState createState() => _EarthquakeAppState();
-}
-
-class _EarthquakeAppState extends State<EarthquakeApp> {
-  String dateStr = "";
-  var earthquakeDatas = [];
-
-  @override
-  Widget build(BuildContext context) { 
-      return layout(context);
-  }
-
-  @override
-  void initState() { 
-    super.initState();
-    getDatas();
-  }
-
- 
-  void getDatas() {
-    EarthquakeData earth = EarthquakeData();
-     earth.getHttp().then((reslut) {
-       setState(() {
-          earthquakeDatas = reslut.data;
-      print('拿到数据了');
-       }); 
-    }).whenComplete((){
-      print('异步任务完成');
-    }).catchError((error){
-      print('异常了$error');
-    });  
-  } 
-  
-  Widget layout(BuildContext context) {  
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: '地震数据',
-      home: EarthquakeHomePage(
-        earthquakeDatas: new List<EarthquakeItemData>.from(earthquakeDatas),
-      ),
+      home: EarthquakeHomePage(),
     );
   }
 }
 
-class EarthquakeHomePage extends StatelessWidget {
-  EarthquakeHomePage({this.earthquakeDatas});
-  final List<EarthquakeItemData> earthquakeDatas;
+class EarthquakeHomePage extends StatelessWidget { 
 
   @override
   Widget build(BuildContext context) {  
-    return EarthquakeListView(earthquakeDatas: earthquakeDatas);
+    return new Scaffold(
+     appBar: new AppBar(
+       title: new Text('地震信息'),
+     ),
+     body: _getInfoWidget(context),
+    );
+  }
+
+  Widget _getInfoWidget(BuildContext context){
+ return  FutureBuilder(
+      future: getHomePageDatas(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData) {
+          return  EarthquakeListView(earthquakeDatas: snapshot.data);
+        } else if (snapshot.hasError){
+          return new Center(
+            child:  new Text('${snapshot.error}'),
+          ) ;
+        } else {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+      }
+    ) ;
   }
 }
 
@@ -69,7 +56,7 @@ class EarthquakeListItem extends StatelessWidget {
         Navigator.push(
           context, 
           new MaterialPageRoute(
-            builder: (context) => EarthquakeDetailPage(detailItem: item)
+            builder: (context) => EarthquakeDetailView(itemId: item.id)
           )
         );
       },
@@ -104,18 +91,14 @@ class EarthquakeListView extends StatelessWidget {
   final List<EarthquakeItemData> earthquakeDatas;
   @override
   Widget build(BuildContext context) { 
-     return new Scaffold(
-     appBar: new AppBar(
-       title: new Text('地震信息'),
-     ),
-     body: new ListView(
+    return  new ListView(
        padding: new EdgeInsets.symmetric(vertical: 8.0),
        children: earthquakeDatas.map((EarthquakeItemData product){
         return new EarthquakeListItem(
           item: product, 
         );
        }).toList(),
-     ), 
+     
    );
   }
 }
