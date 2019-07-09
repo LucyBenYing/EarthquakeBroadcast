@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart'; 
 import 'package:earthquakebroadcast/Home/Data/EarthquakeItemData.dart';  
 import 'package:earthquakebroadcast/Home/Data/EarthquakeData.dart';
-import 'EarthquakeDetailPage.dart'; 
-
-class EarthquakeHomeApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '地震数据',
-      home: EarthquakeHomePage(),
-    );
-  }
-}
+import 'EarthquakeDetailPage.dart';   
 
 class EarthquakeHomePage extends StatelessWidget { 
 
   @override
   Widget build(BuildContext context) {  
+    // addHandelr(context);
     return new Scaffold(
      appBar: new AppBar(
-       title: new Text('地震信息'),
+      title: new Text('地震信息'),
+       actions: <Widget>[
+         new  IconButton(
+           icon: new Icon(Icons.room_service),
+           tooltip: '退出',
+           onPressed: (){
+             Navigator.pushNamedAndRemoveUntil(context,
+             '/login',
+              (Route route)=> false);
+           },
+         )
+       ],
      ),
      body: _getInfoWidget(context),
     );
@@ -51,12 +53,16 @@ class EarthquakeListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tiemStr = item.readTimestamp(item.time); 
-    return ListTile(
+    return new Container(
+      color: item.isAutoFlag(item.autoFlag) ?
+     null : Colors.yellow[100],
+      child:  new  ListTile(
+      
       onTap: (){
         Navigator.push(
           context, 
           new MaterialPageRoute(
-            builder: (context) => EarthquakeDetailView(itemId: item.id)
+            builder: (context) => EarthquakeDetailView(itemId: item.id.toInt())
           )
         );
       },
@@ -77,6 +83,7 @@ class EarthquakeListItem extends StatelessWidget {
        subtitle: new Text( 
         '时间: $tiemStr \n震源: ( ${item.epiLat} , ${item.epiLon} )', 
        ),
+    ),
     );
   }
   Color _getColor(double m) {

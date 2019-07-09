@@ -3,7 +3,7 @@ import 'package:earthquakebroadcast/Home/Data/EarthquakeItemData.dart';
  import 'package:earthquakebroadcast/Home/Data/EarthquakeData.dart';
 
 class EarthquakeDetailView extends StatelessWidget { 
-  final double itemId;
+  final int itemId;
   EarthquakeDetailView({
     Key key, 
     @required this.itemId
@@ -21,23 +21,32 @@ class EarthquakeDetailView extends StatelessWidget {
   }
 
   Widget _showWidget(BuildContext context){
-    return FutureBuilder(
+    return new Container(
+      child:  new 
+     FutureBuilder(
       future: getDetailData(itemId),
       builder: (context, snapshot) {
         if (snapshot.hasData) { 
           EarthquakeItemData item =  snapshot.data;
+          print('形象细心 ${item.toJson()}');
           return _getInfoWidegt(item);
         } else if (snapshot.hasError){
-          return new Text('${snapshot.hasError}');
+          return new Center(
+            child: new Text('${snapshot.hasError}')
+          );
         } else {
-          return new CircularProgressIndicator();
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
         }
       },
+    )
     );
   }
 
   Widget _getInfoWidegt (EarthquakeItemData detailItem) {
     return new Column (
+      mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           new DetailInfoItem(
           name: '位置',
@@ -61,7 +70,11 @@ class EarthquakeDetailView extends StatelessWidget {
         ),
             new DetailInfoItem(
           name: '深度',
-          value: detailItem.epiDepth.toString(),
+          value: detailItem.epiDepth != null ? detailItem.epiDepth.toString() : '',
+        ),
+         new DetailInfoItem(
+          name: '数据类型',
+          value:  detailItem.isAutoFlag(detailItem.autoFlag)? '确定数据' : '自动数据',
         ),
         ],
        );
@@ -85,7 +98,7 @@ DetailInfoItem({
         children: <Widget>[
           // new Expanded(
             new Text(
-               name ,
+               name != null ? name:'' ,
                style: _getTextStyle(true)
              ),
           //  ),
@@ -94,7 +107,7 @@ DetailInfoItem({
             child: new  Container(
               padding: new EdgeInsets.symmetric(horizontal: 20.0),
               child:  new Text(
-               value ,
+                value != null ? value:'',
                style: _getTextStyle(false)
              ),
             ),

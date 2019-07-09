@@ -14,7 +14,8 @@ EarthquakeItemData _$EarthquakeItemDataFromJson(Map<String, dynamic> json) {
       (json['epi_lat'] as num)?.toDouble(),
       (json['epi_lon'] as num)?.toDouble(),
       (json['epi_depth'] as num)?.toDouble(),
-      json['location'] as String);
+      json['location'] as String,
+      json['auto_flag'] as String);
 }
 
 Map<String, dynamic> _$EarthquakeItemDataToJson(EarthquakeItemData instance) =>
@@ -25,5 +26,6 @@ Map<String, dynamic> _$EarthquakeItemDataToJson(EarthquakeItemData instance) =>
       'epi_lat': instance.epiLat,
       'epi_lon': instance.epiLon,
       'epi_depth': instance.epiDepth,
-      'location': instance.location
+      'location': instance.location,
+      'auto_flag': instance.autoFlag
     };
