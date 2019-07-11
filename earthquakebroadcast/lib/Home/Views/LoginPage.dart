@@ -223,8 +223,7 @@ if (name.length > 0 && pass.length > 0) {
 Widget _changePassword(BuildContext context){ 
     return new Column(
     mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-        // _getuserName(context),
+    children: <Widget>[ 
             new TextField(
               onChanged: (String content){
                 print('$content');
