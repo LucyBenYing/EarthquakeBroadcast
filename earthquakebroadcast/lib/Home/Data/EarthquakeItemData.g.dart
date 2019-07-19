@@ -10,7 +10,7 @@ EarthquakeItemData _$EarthquakeItemDataFromJson(Map<String, dynamic> json) {
   return EarthquakeItemData(
       (json['id'] as num)?.toDouble(),
       (json['m'] as num)?.toDouble(),
-      (json['time'] as num)?.toDouble(),
+      json['time'] as String,
       (json['epi_lat'] as num)?.toDouble(),
       (json['epi_lon'] as num)?.toDouble(),
       (json['epi_depth'] as num)?.toDouble(),

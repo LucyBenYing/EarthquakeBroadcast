@@ -26,6 +26,7 @@ class EarthquakeDetailView extends StatelessWidget {
      FutureBuilder(
       future: getDetailData(itemId),
       builder: (context, snapshot) {
+        print('$snapshot,dddd ${snapshot.hasData},,   ${snapshot.data}');
         if (snapshot.hasData) { 
           EarthquakeItemData item =  snapshot.data;
           print('形象细心 ${item.toJson()}');
@@ -58,7 +59,7 @@ class EarthquakeDetailView extends StatelessWidget {
         ),
             new DetailInfoItem(
           name: '时刻',
-          value: detailItem.readTimestamp(detailItem.time),
+          value: detailItem.time,
         ),
             new DetailInfoItem(
           name: '维度',

@@ -9,7 +9,7 @@ part 'EarthquakeItemData.g.dart';
 class EarthquakeItemData  {
   final double id;
   final double m;
-  final double time;
+  final String time;
 
   @JsonKey(name: 'epi_lat')
   final double epiLat;
